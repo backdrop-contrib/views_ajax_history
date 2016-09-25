@@ -217,6 +217,13 @@
 
       addState(options, url);
     }
+
+    for (var i = 0; i < arguments[0].length; i++) {
+      if (arguments[0][i].name == 'page') {
+        arguments[0][i].value = 0;
+      }
+    }
+
     // Call the original Drupal method with the right context.
     beforeSubmit.apply(this, arguments);
   };

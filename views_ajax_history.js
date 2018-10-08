@@ -2,7 +2,7 @@
 
   // Need to keep this to check if there are extra parameters in the original URL.
   var original = {
-    path: window.location.href,
+    path: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '') + window.location.pathname,
     // @TODO integrate #1359798 without breaking history.js
     query: window.location.search || ''
   };

@@ -10,14 +10,14 @@
   /**
    * Keep the original beforeSubmit method to use it later.
    */
-  var beforeSubmit = Drupal.ajax.prototype.beforeSubmit;
+  var beforeSubmit = Backdrop.ajax.prototype.beforeSubmit;
 
   /**
    * Keep the original beforeSerialize method to use it later.
    */
-  var beforeSerialize = Drupal.ajax.prototype.beforeSerialize;
+  var beforeSerialize = Backdrop.ajax.prototype.beforeSerialize;
 
-  Drupal.behaviors.viewsAjaxHistory = {
+  Backdrop.behaviors.viewsAjaxHistory = {
     attach: function (context, settings) {
       // Init the current page too, because the first loaded pager element do
       // not have loadable history and will not work the back button.
@@ -29,7 +29,7 @@
   };
 
   /**
-   * Modification of Drupal.Views.parseQueryString() to allow extracting multivalues fields
+   * Modification of Backdrop.Views.parseQueryString() to allow extracting multivalues fields
    *
    * @param query
    *   String, either a full url or just the query string.
@@ -84,8 +84,8 @@
     var query = [];
 
     // With clean urls off we need to add the 'q' parameter.
-    if (/\?/.test(Drupal.settings.views.ajax_path)) {
-      query.push('q=' + Drupal.Views.getPath(url));
+    if (/\?/.test(Backdrop.settings.views.ajax_path)) {
+      query.push('q=' + Backdrop.Views.getPath(url));
     }
 
     $.each(args, function (name, value) {
@@ -119,7 +119,7 @@
    */
   var addState = function (options, url) {
     // Store the actual view's dom id.
-    Drupal.settings.viewsAjaxHistory.lastViewDomID = options.data.view_dom_id;
+    Backdrop.settings.viewsAjaxHistory.lastViewDomID = options.data.view_dom_id;
     $(window).unbind('statechange', loadView);
     History.pushState(options, document.title, cleanURL(url, options.data));
     $(window).bind('statechange', loadView);
@@ -134,20 +134,20 @@
 
     // This should be the first loaded page, so init the options object.
     if (typeof options.data == 'undefined') {
-      var viewsAjaxSettingsKey = 'views_dom_id:' + Drupal.settings.viewsAjaxHistory.lastViewDomID;
-      if (Drupal.settings.views.ajaxViews.hasOwnProperty(viewsAjaxSettingsKey)) {
-        var viewsAjaxSettings = Drupal.settings.views.ajaxViews[viewsAjaxSettingsKey];
-        viewsAjaxSettings.page = Drupal.settings.viewsAjaxHistory.onloadPageItem;
+      var viewsAjaxSettingsKey = 'views_dom_id:' + Backdrop.settings.viewsAjaxHistory.lastViewDomID;
+      if (Backdrop.settings.views.ajaxViews.hasOwnProperty(viewsAjaxSettingsKey)) {
+        var viewsAjaxSettings = Backdrop.settings.views.ajaxViews[viewsAjaxSettingsKey];
+        viewsAjaxSettings.page = Backdrop.settings.viewsAjaxHistory.onloadPageItem;
         options = {
           data: viewsAjaxSettings,
-          url: Drupal.settings.views.ajax_path
+          url: Backdrop.settings.views.ajax_path
         };
       }
     }
 
-    // need a dummy element to trigger Drupal's AJAX call.
+    // need a dummy element to trigger Backdrop's AJAX call.
     var $dummy = $('<div class="ajaxHistoryDummy"/>');
-    // Drupal's AJAX options.
+    // Backdrop's AJAX options.
     var settings = $.extend({
       submit: options.data,
       setClick: true,
@@ -156,7 +156,7 @@
       progress: { type: 'throbber' }
     }, options);
 
-    new Drupal.ajax(false, $dummy[0], settings);
+    new Backdrop.ajax(false, $dummy[0], settings);
     // trigger ajax call
     // @TODO check there is no leak, $dummy is never destroyed.
     $dummy.trigger('click');
@@ -169,20 +169,20 @@
    *   jQuery DOM element
    * @param options
    */
-  Drupal.ajax.prototype.beforeSerialize = function ($element, options) {
+  Backdrop.ajax.prototype.beforeSerialize = function ($element, options) {
     if (options.data.view_name) {
       // If we're restoring a previous state the dummy element will have this class,
       // and we don't need to go trough all this processing.
       if ($($element).hasClass('ajaxHistoryDummy')) {return;}
 
-      options.url = Drupal.settings.views.ajax_path;
+      options.url = Backdrop.settings.views.ajax_path;
 
       // Check we handle a click on a link, not a form submission.
       if ($element.is('a')) {
         addState(options, $element.attr('href'));
       }
     }
-    // Call the original Drupal method with the right context.
+    // Call the original Backdrop method with the right context.
     beforeSerialize.apply(this, arguments);
   };
 
@@ -196,7 +196,7 @@
    * @param options
    *   Object containing AJAX options.
    */
-  Drupal.ajax.prototype.beforeSubmit = function (form_values, element, options) {
+  Backdrop.ajax.prototype.beforeSubmit = function (form_values, element, options) {
     if (options.data.view_name) {
       var url = original.path + (/\?/.test(original.path) ? '&' : '?') + element.formSerialize();
 
@@ -224,7 +224,7 @@
       }
     }
 
-    // Call the original Drupal method with the right context.
+    // Call the original Backdrop method with the right context.
     beforeSubmit.apply(this, arguments);
   };
 }(jQuery));

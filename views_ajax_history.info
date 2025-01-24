@@ -1,6 +1,7 @@
 name = Views AJAX History
 description = Add bookmarking abilities to AJAX Views.
 package = Views
-core = 7.x
+backdrop = 1.x
+type = module
 
 dependencies[] = libraries

@@ -5,14 +5,15 @@
  */
 
 /**
- * Implements hook_views_pre_render(). */
+ * Implements hook_views_pre_render().
+ */
 function views_ajax_history_views_pre_render($view) {
   if ($view->use_ajax && !$view->editing) {
     // @TODO add option to views form for html4+html5 or html5 only
 
-    $history_js = libraries_get_path('history.js') . '/scripts/bundled/html4+html5/jquery.history.js';
+    $history_js = backdrop_get_path('module', 'views_ajax_history') . '/js/history.js/scripts/bundled/html4+html5/jquery.history.js';
     backdrop_add_js($history_js, array('group' => JS_LIBRARY));
-    backdrop_add_js(backdrop_get_path('module', 'views_ajax_history') . '/views_ajax_history.js', array('weight' => 10));
+    backdrop_add_js(backdrop_get_path('module', 'views_ajax_history') . '/js/views_ajax_history.js', array('weight' => 10));
     backdrop_add_js(array('viewsAjaxHistory' => array('renderPageItem' => isset($_GET['page']) ? $_GET['page'] : 0)), 'setting');
   }
 }

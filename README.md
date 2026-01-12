@@ -22,7 +22,8 @@ complete text.
 Maintainers
 -----------
 
-- Alex Höbart (https://github.com/AlexHoebart-ICPDR)
+- [Alex Höbart](https://github.com/AlexHoebart-ICPDR)
+- [Herb v/d Dool](https://github.com/herbdool)
 
 Originally written for Drupal by
 

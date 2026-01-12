@@ -3,3 +3,5 @@ description = Add bookmarking abilities to AJAX Views.
 package = Views
 backdrop = 1.x
 type = module
+
+dependencies[] = views

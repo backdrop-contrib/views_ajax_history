@@ -5,36 +5,56 @@
  */
 
 /**
- * Implements hook_library_info().
+ * Implements hook_autoload_info().
  */
-function views_ajax_history_library_info() {
-  $libraries = array();
+function views_ajax_history_autoload_info() {
+  return array(
+    'views_plugin_display_extender_ajax_history' => 'views/views_plugin_display_extender_ajax_history.inc',
+  );
+}
 
-  $lib_path = backdrop_get_path('module', 'views_ajax_history') . '/js/history.js';
-
-  // Make sure we have a valid library path before returning library load info.
-  if (!empty($lib_path)) {
-    $libraries['history.js'] = array(
-      'title' => 'history.js',
-      'website' => 'https://github.com/browserstate/history.js',
-      'version' => '1.8b2',
-      'js' => array(
-        $lib_path . '/scripts/bundled/html4+html5/jquery.history.js' => array(),
-      ),
-    );
-  }
-  return $libraries;
+/**
+ * Implements hook_views_api().
+ */
+function views_ajax_history_views_api() {
+  return array(
+    'api' => '3.0',
+    'path' => backdrop_get_path('module', 'views_ajax_history') . '/views',
+  );
 }
 
 /**
  * Implements hook_views_pre_render().
  */
-function views_ajax_history_views_pre_render($view) {
-  if ($view->use_ajax && !$view->editing) {
-    // @TODO add option to views form for html4+html5 or html5 only
+function views_ajax_history_views_pre_render(&$view) {
+  $display_extenders_options = $view->display_handler->options ?? [];
+  if ($view->use_ajax && !$view->editing && empty($view->is_attachment)
+    && (isset($display_extenders_options['enable_ajax_history'])
+      && $display_extenders_options['enable_ajax_history'] == TRUE)
+    ) {
 
-    backdrop_add_library('views_ajax_history', 'history.js');
+    $settings = array(
+      'viewsAjaxHistory' => array(
+        'renderPageItem' => isset($_GET['page']) ? $_GET['page'] : 0,
+      ),
+    );
+
+    if (isset($display_extenders_options['exclude_ajax_args']) && $display_extenders_options['exclude_ajax_args'] !== '') {
+      $arguments_to_exclude = preg_split('/[\n\r\s]+/', $display_extenders_options['exclude_ajax_args'] ?? '');
+      // Filter empty lines and add them to settings.
+      $settings['viewsAjaxHistory']['excludeArgs'] = array_filter($arguments_to_exclude, 'strlen');
+    }
+
+    // Save the initial exposed input on first page load.
+    if (backdrop_is_html()) {
+      $exposed = $view->exposed_input;
+      $dom_id = $view->dom_id;
+      foreach ($exposed as $key => $value) {
+        $settings['viewsAjaxHistory']['initialExposedInput']['views_dom_id:' . $dom_id][$key] = $value;
+      }
+    }
+
     backdrop_add_js(backdrop_get_path('module', 'views_ajax_history') . '/js/views_ajax_history.js', array('weight' => 10));
-    backdrop_add_js(array('viewsAjaxHistory' => array('renderPageItem' => isset($_GET['page']) ? $_GET['page'] : 0)), 'setting');
+    backdrop_add_js($settings, 'setting');
   }
 }

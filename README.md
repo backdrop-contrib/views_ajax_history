@@ -1,32 +1,48 @@
-Views Ajax History
-------------------
+# Views Ajax History
 
-This module adds bookmarking abilities to AJAX views by integrating the
-history.js library to views.
+This module bookmarking abilities to AJAX views. It allows users to navigate
+forward and backward through previously loaded views pages without reloading the page.
 
-Note: this is a first port to Backdrop. Filters work, Paging and Sorting does not work yet (full page request).
+## Installation
 
+1. Download and extract the module files to your Backdrop modules directory.
+2. Enable the module through the Backdrop administration interface.
+3. Edit the view for which you want to enable AJAX history, and under the
+   "Other" section > "Use AJAX", set to "Yes" and select "Views Ajax History".
+4. (Optional) Add a list of query arguments that you'd like to exclude from the
+   URL, which should be loaded with a full page refresh.
+5. Apply the changes, and save the view.
 
-Installation
-------------
+## Usage
 
-The history.js library from https://github.com/balupton/History.js is already
-integrated in the module.
+Once the module is enabled and configured for a view, users can navigate through
+previously loaded views pages by clicking their browser's back and forward
+buttons.
 
-License
--------
+## Configuration
 
-This project is GPL v2 software. See the LICENSE.txt file in this directory for
-complete text.
+The module provides some configuration options for controlling how AJAX history
+is handled for Views pages. These options can be found under the
+"Use AJAX" section in a Views administration interface.
 
-Maintainers
------------
+## License
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory
+for complete text.
+
+## Maintainers
 
 - [Alex Höbart](https://github.com/AlexHoebart-ICPDR)
 - [Herb v/d Dool](https://github.com/herbdool)
 
-Originally written for Drupal by
+## Credits
 
-- Théodore Biadala (https://www.drupal.org/u/nod_)
+Ported to Backdrop by Alex Höbart.
 
-This module is seeking additional maintainers.
+Drupal maintainers:
+
+- Théodore Biadala - [nod_](https://www.drupal.org/u/nod_)
+- Andrei Mateescu - [amateescu](https://www.drupal.org/u/amateescu)
+- Joël Pittet - [joelpittet](https://www.drupal.org/u/joelpittet)
+- Kálmán Hosszu - [kalman.hosszu](https://www.drupal.org/u/kalmanhosszu)
+- Ivan Trokhanenko - [i-trokhanenko](https://www.drupal.org/u/i-trokhanenko)

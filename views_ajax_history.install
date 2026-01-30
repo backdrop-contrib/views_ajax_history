@@ -1,0 +1,28 @@
+<?php
+/**
+ * @file
+ * Install and update functionality.
+ */
+
+/**
+ * Enable Ajax History for all Views using AJAX.
+ */
+function views_ajax_history_update_1001() {
+  $views = config_get_names_with_prefix('views.view');
+  foreach ($views as $view_name) {
+    $config = config($view_name);
+    $use_ajax_default = $config->get('display.default.display_options.use_ajax');
+    $displays = $config->get('display');
+    foreach ($displays as $display_name => $display_config) {
+      if (isset($display_config['display_options']['use_ajax']) && $display_config['display_options']['use_ajax'] == false) {
+        continue;
+      }
+      if ($use_ajax_default || !empty($display_config['display_options']['use_ajax'])) {
+        $config->set('display.' . $display_name . '.display_options.enable_ajax_history', TRUE);
+        $config->set('display.' . $display_name . '.display_options.exclude_ajax_args', TRUE);
+      }
+    }
+
+    $config->save();
+  }
+}

@@ -1,6 +1,6 @@
 # Views Ajax History
 
-This module bookmarking abilities to AJAX views. It allows users to navigate
+This module adds bookmarking abilities to AJAX views. It allows users to navigate
 forward and backward through previously loaded views pages without reloading the page.
 
 ## Installation
@@ -8,7 +8,7 @@ forward and backward through previously loaded views pages without reloading the
 1. Download and extract the module files to your Backdrop modules directory.
 2. Enable the module through the Backdrop administration interface.
 3. Edit the view for which you want to enable AJAX history, and under the
-   "Other" section > "Use AJAX", set to "Yes" and select "Views Ajax History".
+   "Other" section > "Use AJAX", set to "Yes" and select "AJAX History".
 4. (Optional) Add a list of query arguments that you'd like to exclude from the
    URL, which should be loaded with a full page refresh.
 5. Apply the changes, and save the view.

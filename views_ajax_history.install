@@ -19,7 +19,7 @@ function views_ajax_history_update_1001() {
       }
       if ($use_ajax_default || !empty($display_config['display_options']['use_ajax'])) {
         $config->set('display.' . $display_name . '.display_options.enable_ajax_history', TRUE);
-        $config->set('display.' . $display_name . '.display_options.exclude_ajax_args', TRUE);
+        $config->set('display.' . $display_name . '.display_options.exclude_ajax_args', '');
       }
     }
 

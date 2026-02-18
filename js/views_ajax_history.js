@@ -204,6 +204,9 @@
       options = history.state;
     }
 
+    // Need a dummy element to trigger Backdrop's AJAX call.
+    var $dummy = $('<div class="ajaxHistoryDummy"/>');
+
     // Backdrop's AJAX options.
     var settings = $.extend({
       submit: options.data,
@@ -214,9 +217,10 @@
       httpMethod: 'GET',
     }, options);
 
-    var viewsAjaxSubmit = Backdrop.ajax(settings);
+    new Backdrop.ajax(false, $dummy[0], settings);
     // Trigger ajax call.
-    viewsAjaxSubmit.execute();
+    // @todo check there is no leak, $dummy is never destroyed.
+    $dummy.trigger('click');
   };
 
   /**

@@ -162,7 +162,7 @@
   /**
    * Unbind 'popstate' when adding a new state to avoid an infinite loop.
    *
-   * We only use the 'popstate' event to trigger refresh on back of forward click.
+   * We only use the 'popstate' event to trigger refresh on back or forward click.
    *
    * @param options
    *   Object containing the values from views' AJAX call.
@@ -204,6 +204,9 @@
       options = history.state;
     }
 
+    // Need a dummy element to trigger Backdrop's AJAX call.
+    var $dummy = $('<div class="ajaxHistoryDummy"/>');
+
     // Backdrop's AJAX options.
     var settings = $.extend({
       submit: options.data,
@@ -214,9 +217,10 @@
       httpMethod: 'GET',
     }, options);
 
-    var viewsAjaxSubmit = Backdrop.ajax(settings);
+    new Backdrop.ajax(false, $dummy[0], settings);
     // Trigger ajax call.
-    viewsAjaxSubmit.execute();
+    // @todo check there is no leak, $dummy is never destroyed.
+    $dummy.trigger('click');
   };
 
   /**
@@ -227,6 +231,14 @@
    * @param options
    */
   Backdrop.ajax.prototype.beforeSerialize = function (element, options) {
+    if (options.data.view_name) {
+      // If restoring a previous state the dummy element will have this class,
+      // don't need to go through all this processing.
+      if ($(element).hasClass('ajaxHistoryDummy')) {
+        return;
+      }
+    }
+
     // Check that we handle a click on a link, not a form submission.
     if (options.data.view_name && element && $(element).is('a')) {
       let params = new URLSearchParams($(element).attr('href'));

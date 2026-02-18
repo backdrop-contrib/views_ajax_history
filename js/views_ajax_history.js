@@ -241,7 +241,8 @@
 
     // Check that we handle a click on a link, not a form submission.
     if (options.data.view_name && element && $(element).is('a')) {
-      let params = new URLSearchParams($(element).attr('href'));
+      // Strip the view base path so it isn't treated as a parameter.
+      let params = new URLSearchParams($(element).attr('href').replace('/' + options.data.view_base_path + '?', ''));
       if (!$.isEmptyObject(Backdrop.settings.viewsAjaxHistory.excludeArgs)) {
         var keysToRemove = [];
         $.each(Backdrop.settings.viewsAjaxHistory.excludeArgs, function (index, pathToExclude) {

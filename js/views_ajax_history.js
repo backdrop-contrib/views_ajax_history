@@ -231,6 +231,14 @@
    * @param options
    */
   Backdrop.ajax.prototype.beforeSerialize = function (element, options) {
+    if (options.data.view_name) {
+      // If restoring a previous state the dummy element will have this class,
+      // don't need to go through all this processing.
+      if ($(element).hasClass('ajaxHistoryDummy')) {
+        return;
+      }
+    }
+
     // Check that we handle a click on a link, not a form submission.
     if (options.data.view_name && element && $(element).is('a')) {
       let params = new URLSearchParams($(element).attr('href'));

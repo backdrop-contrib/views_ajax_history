@@ -162,7 +162,7 @@
   /**
    * Unbind 'popstate' when adding a new state to avoid an infinite loop.
    *
-   * We only use the 'popstate' event to trigger refresh on back of forward click.
+   * We only use the 'popstate' event to trigger refresh on back or forward click.
    *
    * @param options
    *   Object containing the values from views' AJAX call.

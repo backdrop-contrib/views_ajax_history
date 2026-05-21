@@ -1,5 +1,7 @@
 # Views Ajax History
 
+⚠️ **Status:** The functionality that this module provides has been included in Backdrop core as of version 1.34.0, so this module is no longer required.
+
 This module adds bookmarking abilities to AJAX views. It allows users to navigate
 forward and backward through previously loaded views pages without reloading the page.
 
